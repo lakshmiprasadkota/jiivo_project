@@ -122,7 +122,7 @@ class _VerificationPageState extends State<VerificationPage> {
                 decoration: BoxDecoration(
                     boxShadow: [
                       BoxShadow(
-                          color: Color(0xff3B83FC33),
+                          color: Color(0x333B83FC),
                           offset: Offset(0, 5),
                           blurRadius: 10
                       )

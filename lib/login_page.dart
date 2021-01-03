@@ -10,6 +10,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  FocusNode myFocusNode = new FocusNode();
   bool hidepassword = false;
   bool loading = false;
   dynamic res;
@@ -69,7 +70,7 @@ class _LoginPageState extends State<LoginPage> {
               Container(
                 alignment: Alignment.topLeft,
                   child: Text("Sign In" , style: TextStyle(color: Color(0xFF2E3748) ,fontWeight: FontWeight.w600, fontSize: 35),))
-              ,SizedBox(height: 10,),
+              ,SizedBox(height: 19,),
               Container(
                 child: TextField(
                   controller: numberController,
@@ -95,6 +96,8 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(height: 24,),
               Container(
                 child: TextField(
+
+                  focusNode: myFocusNode,
                    controller: passwordController,
                   keyboardType: TextInputType.text,
                   obscureText: hidepassword,
@@ -109,7 +112,7 @@ class _LoginPageState extends State<LoginPage> {
                           icon:Icon(hidepassword?Icons.visibility_off:Icons.visibility)
                       ),
                     labelText:"Password",
-                    labelStyle: TextStyle(color: Color(0xffFF8701) , fontSize: 12 ),
+                    labelStyle: TextStyle(color: myFocusNode.hasFocus ? Color(0xff97A6BA) :Color(0xffFF8701)  , fontSize: 12 ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),
                       borderSide: BorderSide(color: Color(0xffFF8701) , width: 2)
@@ -139,7 +142,7 @@ class _LoginPageState extends State<LoginPage> {
                 decoration: BoxDecoration(
                     boxShadow: [
                     BoxShadow(
-                      color: Color(0xff3B83FC33),
+                      color: Color(0x333B83FC),
                       offset: Offset(0, 5),
                       blurRadius: 10
                     )
@@ -164,7 +167,7 @@ class _LoginPageState extends State<LoginPage> {
                 },
                 child: RichText(text: TextSpan(
                  text : "Don’t have an account? ",
-                  style: TextStyle(color: Color(0xff9FA5BB) , fontSize: 15),
+                  style: TextStyle(color: Color(0xff9FA5BB) , fontWeight: FontWeight.w600,fontSize: 15),
                   children: [
                     TextSpan(text: "Sign up",
                     style: TextStyle(color: Color(0xffFF8701) , fontSize: 15),
@@ -172,7 +175,7 @@ class _LoginPageState extends State<LoginPage> {
                 )),
               ),
               SizedBox(height: 129,),
-              Text("-Or sign in withFringerprint-" , style: TextStyle(color: Color(0xff1E2C40), fontSize: 15),)
+              Text("-Or sign in withFringerprint-" , style: TextStyle(color: Color(0xff1E2C40),fontWeight: FontWeight.w600, fontSize: 15),)
 
             ],
           ),

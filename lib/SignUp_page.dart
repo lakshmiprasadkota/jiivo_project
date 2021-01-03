@@ -89,7 +89,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       labelStyle: TextStyle(color: Color(0xffFF8701) , fontSize: 12 ),
                       enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
-                          borderSide: BorderSide(color: Color(0xffE3EAF2) , width: 2)
+                          borderSide: BorderSide(color: Color(0xffFF8701), width: 2)
                       ),
                       focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
@@ -126,7 +126,7 @@ class _SignUpPageState extends State<SignUpPage> {
               Container(
                 child: TextField(
                   controller: numberController,
-                  keyboardType: TextInputType.number,
+                  keyboardType: TextInputType.text,
                   decoration: InputDecoration(
                       isDense: true,
                       hintText: "+91",
@@ -189,7 +189,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   decoration: BoxDecoration(
                       boxShadow: [
                         BoxShadow(
-                            color: Color(0xffFF87011A),
+                            color: Color(0x1AFF8701),
                             offset: Offset(0, 5),
                             blurRadius: 10
                         )
@@ -210,7 +210,7 @@ class _SignUpPageState extends State<SignUpPage> {
               SizedBox(height: 39,),
 
 
-              Text("-OR-" , style: TextStyle(color: Color(0xff000000), fontSize: 15),),
+              Text("-OR-" , style: TextStyle(color: Color(0xff000000), fontWeight: FontWeight.w600, fontSize: 15),),
               SizedBox(height: 19,),
               Container(
 
@@ -236,7 +236,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       children: [
                         Image.asset("assets/images/g.png" , height: 20, width: 20,),
                         SizedBox(width: 10,),
-                        Text("Sign Up with Google" , style: TextStyle( fontSize: 14,color: Color(0xff000000)),)
+                        Text("Sign Up with Google" , style: TextStyle( fontSize: 14,fontWeight: FontWeight.w600,color: Color(0xff000000)),)
 
                       ],
                     ),
