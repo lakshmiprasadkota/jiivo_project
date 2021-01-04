@@ -64,6 +64,7 @@ class _VerificationPageState extends State<VerificationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomPadding: false,
       body: Container(
         margin: EdgeInsets.symmetric(vertical: 191 , horizontal: 25),
         child: Column(
@@ -77,38 +78,43 @@ class _VerificationPageState extends State<VerificationPage> {
             Flexible(child: Text("enter it below to continue.",style: TextStyle(color: Color(0xff9FA5BB) ,fontSize: 14))),
 
             SizedBox(height: 63,),
-            PinCodeTextField(
-              length: 6,
-              obscureText: false,
-              animationType: AnimationType.fade,
-              pinTheme: PinTheme(
-                shape: PinCodeFieldShape.box,
-                borderRadius: BorderRadius.circular(5),
-                fieldHeight: 50,
-                fieldWidth: 40,
-                activeFillColor: Colors.white,
-              ),
-              animationDuration: Duration(milliseconds: 300),
-              backgroundColor: Colors.blue.shade50,
-              enableActiveFill: true,
+            // PinCodeTextField(
+            //   length: 6,
+            //   obscureText: false,
+            //   animationType: AnimationType.fade,
+            //   pinTheme: PinTheme(
+            //     shape: PinCodeFieldShape.box,
+            //     borderRadius: BorderRadius.circular(5),
+            //     fieldHeight: 50,
+            //     fieldWidth: 40,
+            //     activeFillColor: Colors.white,
+            //   ),
+            //   animationDuration: Duration(milliseconds: 300),
+            //   backgroundColor: Colors.blue.shade50,
+            //   enableActiveFill: true,
+            //
+            //   controller: numberController,
+            //   onCompleted: (v) {
+            //     print("Completed");
+            //   },
+            //   onChanged: (value) {
+            //     print(value);
+            //     setState(() {
+            //
+            //     });
+            //   },
+            //   beforeTextPaste: (text) {
+            //     print("Allowing to paste $text");
+            //     //if you return true then it will show the paste confirmation dialog. Otherwise if false, then nothing will happen.
+            //     //but you can show anything you want here, like your pop up saying wrong paste format or etc
+            //     return true;
+            //   },
+            // ),
 
-              controller: numberController,
-              onCompleted: (v) {
-                print("Completed");
-              },
-              onChanged: (value) {
-                print(value);
-                setState(() {
 
-                });
-              },
-              beforeTextPaste: (text) {
-                print("Allowing to paste $text");
-                //if you return true then it will show the paste confirmation dialog. Otherwise if false, then nothing will happen.
-                //but you can show anything you want here, like your pop up saying wrong paste format or etc
-                return true;
-              },
-            ),
+            TextField(
+              controller:  numberController,
+            ) ,
 
             SizedBox(height: 30,),
             if (loading)
