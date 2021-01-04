@@ -3,6 +3,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:jiovii_fullapp/Extension_page.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 import 'jiivo_Page.dart';
@@ -27,16 +28,16 @@ class _VerificationPageState extends State<VerificationPage> {
     String number = numberController.text.trim();
 
 
-    // if (number.isEmpty || number.length < 13) {
-    //   Fluttertoast.showToast(msg: "Invalid Number");
-    //   return;
-    // }
+    if (number.isEmpty ) {
+      Fluttertoast.showToast(msg: "Invalid Number");
+      return;
+    }
 
     setState(() {
       loading = true;
     });
     FormData formData = FormData.fromMap({
-      "otp": "12345",
+      "otp": numberController,
 
     });
     Response response =
@@ -64,13 +65,12 @@ class _VerificationPageState extends State<VerificationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomPadding: false,
+      resizeToAvoidBottomPadding: true,
       body: Container(
         margin: EdgeInsets.symmetric(vertical: 191 , horizontal: 25),
         child: Column(
           children: [
-            Text("Verification" , style: TextStyle(color: Color(0xff2E3748) ,
-                fontSize: 35, fontWeight: FontWeight.w400),),
+            Text("Verification" , style: TitleStyle),
             SizedBox(height: 15,),
             Flexible(child: Text("6 - Digit PIN has been sent to your phone, " ,style: TextStyle(color: Color(0xff9FA5BB) ,
                 fontSize: 14 ),)),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:jiovii_fullapp/SignUp_page.dart';
 import 'package:jiovii_fullapp/jiivo_Page.dart';
+import 'Extension_page.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -10,7 +11,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  FocusNode myFocusNode = new FocusNode();
+  FocusNode _focusNode ;
   bool hidepassword = false;
   bool loading = false;
   dynamic res;
@@ -57,7 +58,22 @@ class _LoginPageState extends State<LoginPage> {
     }
     print(response);
   }
+  @override
+  void initState() {
+    super.initState();
+    _focusNode = FocusNode();
+  }
 
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
+  }
+  _requestFocus(){
+    setState(() {
+      FocusScope.of(context).requestFocus(_focusNode);
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,19 +85,21 @@ class _LoginPageState extends State<LoginPage> {
             children: [
               Container(
                 alignment: Alignment.topLeft,
-                  child: Text("Sign In" , style: TextStyle(color: Color(0xFF2E3748) ,fontWeight: FontWeight.w600, fontSize: 35),))
+                  child: Text("Sign In" , style: TitleStyle,))
               ,SizedBox(height: 19,),
               Container(
                 child: TextField(
+
                   controller: numberController,
                   keyboardType: TextInputType.text,
                   decoration: InputDecoration(
                     isDense: true,
                     hintText: "+91",
-                    hintStyle: TextStyle(color: Color(0xff2E3748) , fontSize: 14 ),
+                    hintStyle: hint ,
                     labelText:"Number",
-                    labelStyle: TextStyle(color: Color(0xffFF8701) , fontSize: 12 ),
-                    enabledBorder: OutlineInputBorder(
+                    labelStyle:TextStyle(color: _focusNode.hasFocus ?Color (0xff97A6BA):Color(0xffFF8701), fontSize: 12,fontWeight: FontWeight.bold),
+
+                      enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),
                       borderSide: BorderSide(color: Color(0xffFF8701) , width: 2)
                     ),
@@ -95,10 +113,13 @@ class _LoginPageState extends State<LoginPage> {
               ),
               SizedBox(height: 24,),
               Container(
-                child: TextField(
+                child: TextField (
+                  focusNode:  _focusNode,
+                  onTap : (){
 
-                  focusNode: myFocusNode,
-                   controller: passwordController,
+                    _requestFocus();
+                  },
+                  controller: passwordController,
                   keyboardType: TextInputType.text,
                   obscureText: hidepassword,
                   decoration: InputDecoration(
@@ -112,8 +133,10 @@ class _LoginPageState extends State<LoginPage> {
                           icon:Icon(hidepassword?Icons.visibility_off:Icons.visibility)
                       ),
                     labelText:"Password",
-                    labelStyle: TextStyle(color: myFocusNode.hasFocus ? Color(0xff97A6BA) :Color(0xffFF8701)  , fontSize: 12 ),
-                    enabledBorder: OutlineInputBorder(
+
+                     labelStyle:  TextStyle(color: _focusNode.hasFocus ?Color (0xff97A6BA):Color(0xffFF8701), fontSize: 12,fontWeight: FontWeight.bold),
+
+                      enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),
                       borderSide: BorderSide(color: Color(0xffFF8701) , width: 2)
                     ),
@@ -157,8 +180,8 @@ class _LoginPageState extends State<LoginPage> {
                       borderRadius: BorderRadius.circular(20.0),
                     ),
                     color: Color(0xffFF8701),
-                    child: Text("Sign In" , style: TextStyle(color: Color(0xFFFFFFFF) ,
-                    fontSize: 14),)),
+                    child: Text("Sign In" , style: botton ,
+                   )),
               ),
               SizedBox(height: 19,),
               InkWell(
@@ -175,8 +198,25 @@ class _LoginPageState extends State<LoginPage> {
                 )),
               ),
               SizedBox(height: 129,),
-              Text("-Or sign in withFringerprint-" , style: TextStyle(color: Color(0xff1E2C40),fontWeight: FontWeight.w600, fontSize: 15),)
+              Text("-Or sign in withFringerprint-" , style: TextStyle(color: Color(0xff1E2C40),fontWeight: FontWeight.w600, fontSize: 15),),
+              SizedBox(height: 31,),
+              Container(
+                height: 58,
+                width: 58,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Color(0xffFF8701),
 
+                    boxShadow: [
+                      BoxShadow(
+                          color: Color(0x5CFF8701),
+                          offset: Offset(0, 3),
+                          blurRadius: 6
+                      )
+                    ]
+                ),
+                child: Center(child: Image.asset("assets/images/finger.png")),
+              )
             ],
           ),
         ),

@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:jiovii_fullapp/Extension_page.dart';
 import 'package:jiovii_fullapp/jiivo_Page.dart';
 import 'package:jiovii_fullapp/verification_page.dart';
 
@@ -75,7 +76,7 @@ class _SignUpPageState extends State<SignUpPage> {
             children: [
               Container(
                   alignment: Alignment.topLeft,
-                  child: Text("Sign In" , style: TextStyle(color: Color(0xFF2E3748) ,fontWeight: FontWeight.w600, fontSize: 35),))
+                  child: Text("Sign In" , style: TitleStyle,))
               ,SizedBox(height: 19,),
               Container(
                 child: TextField(
@@ -84,7 +85,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   decoration: InputDecoration(
                       isDense: true,
                       hintText: "Denom Josh",
-                      hintStyle: TextStyle(color: Color(0xff2E3748) , fontSize: 14 ),
+                      hintStyle: hint,
                       labelText:"Name",
                       labelStyle: TextStyle(color: Color(0xffFF8701) , fontSize: 12 ),
                       enabledBorder: OutlineInputBorder(
@@ -107,7 +108,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   decoration: InputDecoration(
                       isDense: true,
                       hintText: "Denom@108",
-                      hintStyle: TextStyle(color: Color(0xff2E3748) , fontSize: 14 ),
+                      hintStyle: hint,
                       labelText:"E-mail",
                       labelStyle: TextStyle(color: Color(0xffFF8701) , fontSize: 12 ),
                       enabledBorder: OutlineInputBorder(
@@ -130,7 +131,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   decoration: InputDecoration(
                       isDense: true,
                       hintText: "+91",
-                      hintStyle: TextStyle(color: Color(0xff2E3748) , fontSize: 14 ),
+                      hintStyle: hint,
                       labelText:"Number",
                       labelStyle: TextStyle(color: Color(0xffFF8701) , fontSize: 12 ),
                       enabledBorder: OutlineInputBorder(
@@ -204,8 +205,8 @@ class _SignUpPageState extends State<SignUpPage> {
                         borderRadius: BorderRadius.circular(20.0),
                       ),
                       color: Color(0xffFF8701),
-                      child: Text("Sign In" , style: TextStyle(color: Color(0xFFFFFFFF) ,
-                          fontSize: 14),)),
+                      child: Text("Sign In" , style: botton ,
+                         )),
                 ),
               SizedBox(height: 39,),
 
