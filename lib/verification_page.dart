@@ -14,7 +14,7 @@ class VerificationPage extends StatefulWidget {
 }
 
 class _VerificationPageState extends State<VerificationPage> {
-  bool hidepassword = false;
+
 
   bool loading = false;
 
@@ -37,7 +37,7 @@ class _VerificationPageState extends State<VerificationPage> {
       loading = true;
     });
     FormData formData = FormData.fromMap({
-      "otp": numberController,
+      "otp": number,
 
     });
     Response response =
@@ -49,6 +49,7 @@ class _VerificationPageState extends State<VerificationPage> {
     setState(() {
       res = response.data;
       loading = false;
+
     });
     if (response.data['status']) {
 
@@ -60,95 +61,99 @@ class _VerificationPageState extends State<VerificationPage> {
       print(response.data['message']);
     }
     print(response);
+    print(number);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomPadding: true,
-      body: Container(
-        margin: EdgeInsets.symmetric(vertical: 191 , horizontal: 25),
-        child: Column(
-          children: [
-            Text("Verification" , style: TitleStyle),
-            SizedBox(height: 15,),
-            Flexible(child: Text("6 - Digit PIN has been sent to your phone, " ,style: TextStyle(color: Color(0xff9FA5BB) ,
-                fontSize: 14 ),)),
-            SizedBox(height: 3,),
-            Flexible(child: Text("enter it below to continue.",style: TextStyle(color: Color(0xff9FA5BB) ,fontSize: 14))),
+    resizeToAvoidBottomPadding: false,
 
-            SizedBox(height: 63,),
-            // PinCodeTextField(
-            //   length: 6,
-            //   obscureText: false,
-            //   animationType: AnimationType.fade,
-            //   pinTheme: PinTheme(
-            //     shape: PinCodeFieldShape.box,
-            //     borderRadius: BorderRadius.circular(5),
-            //     fieldHeight: 50,
-            //     fieldWidth: 40,
-            //     activeFillColor: Colors.white,
-            //   ),
-            //   animationDuration: Duration(milliseconds: 300),
-            //   backgroundColor: Colors.blue.shade50,
-            //   enableActiveFill: true,
-            //
-            //   controller: numberController,
-            //   onCompleted: (v) {
-            //     print("Completed");
-            //   },
-            //   onChanged: (value) {
-            //     print(value);
-            //     setState(() {
-            //
-            //     });
-            //   },
-            //   beforeTextPaste: (text) {
-            //     print("Allowing to paste $text");
-            //     //if you return true then it will show the paste confirmation dialog. Otherwise if false, then nothing will happen.
-            //     //but you can show anything you want here, like your pop up saying wrong paste format or etc
-            //     return true;
-            //   },
-            // ),
+      body:
+     Container(
+          margin: EdgeInsets.symmetric(vertical: 191 , horizontal: 25),
+          child: Column(
+            children: [
+              Text("Verification" , style: TitleStyle),
+              SizedBox(height: 15,),
+              Flexible(child: Text("6 - Digit PIN has been sent to your phone, " ,style: TextStyle(color: Color(0xff9FA5BB) ,
+                  fontSize: 14 ),)),
+              SizedBox(height: 3,),
+              Flexible(child: Text("enter it below to continue.",style: TextStyle(color: Color(0xff9FA5BB) ,fontSize: 14))),
+
+              SizedBox(height: 63,),
+              // PinCodeTextField(
+              //   length: 6,
+              //   obscureText: false,
+              //   animationType: AnimationType.fade,
+              //   pinTheme: PinTheme(
+              //     shape: PinCodeFieldShape.box,
+              //     borderRadius: BorderRadius.circular(5),
+              //     fieldHeight: 50,
+              //     fieldWidth: 40,
+              //     activeFillColor: Colors.white,
+              //   ),
+              //   animationDuration: Duration(milliseconds: 300),
+              //   backgroundColor: Colors.blue.shade50,
+              //   enableActiveFill: true,
+              //
+              //   controller: numberController,
+              //   onCompleted: (v) {
+              //     print("Completed");
+              //   },
+              //   onChanged: (value) {
+              //     print(value);
+              //     setState(() {
+              //
+              //     });
+              //   },
+              //   beforeTextPaste: (text) {
+              //     print("Allowing to paste $text");
+              //     //if you return true then it will show the paste confirmation dialog. Otherwise if false, then nothing will happen.
+              //     //but you can show anything you want here, like your pop up saying wrong paste format or etc
+              //     return true;
+              //   },
+              // ),
 
 
-            TextField(
-              controller:  numberController,
-            ) ,
+              TextField(
+                controller:  numberController,
+              ) ,
 
-            SizedBox(height: 30,),
-            if (loading)
-              Center(
-                child: CircularProgressIndicator(),
-              )
-            else
-              Container(
-                height: 50,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                          color: Color(0x333B83FC),
-                          offset: Offset(0, 5),
-                          blurRadius: 10
-                      )
-                    ]
+              SizedBox(height: 30,),
+              if (loading)
+                Center(
+                  child: CircularProgressIndicator(),
+                )
+              else
+                Container(
+                  height: 50,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                            color: Color(0x333B83FC),
+                            offset: Offset(0, 5),
+                            blurRadius: 10
+                        )
+                      ]
+                  ),
+                  child: RaisedButton(onPressed: (){
+                    setState(() {
+                      performLogin();
+                    });
+                  } ,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
+                      color: Color(0xffFF8701),
+                      child: Text("Confirm" , style: TextStyle(color: Color(0xFFFFFFFF) ,
+                          fontSize: 14),)),
                 ),
-                child: RaisedButton(onPressed: (){
-                  setState(() {
-                    performLogin();
-                  });
-                } ,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20.0),
-                    ),
-                    color: Color(0xffFF8701),
-                    child: Text("Confirm" , style: TextStyle(color: Color(0xFFFFFFFF) ,
-                        fontSize: 14),)),
-              ),
-          ],
+            ],
+          ),
         ),
-      ),
+
     );
   }
 }

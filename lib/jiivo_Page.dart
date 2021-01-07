@@ -1,8 +1,11 @@
 
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:jiovii_fullapp/ProfileScreen.dart';
+import 'package:jiovii_fullapp/todo.dart';
 
 class Homepage extends StatefulWidget {
   @override
@@ -10,6 +13,7 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
+
 
   int selectedIndex = 0; //to handle which item is currently selected in the bottom app bar
   String text = "Home";
@@ -19,6 +23,7 @@ class _HomepageState extends State<Homepage> {
       text = buttonText;
     });
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -53,6 +58,7 @@ indicatorColor: Color(0xffFF8701),
                 children: [
                   CurrentEvent(),
                   PastEvent(),
+
                 ],
               ),
             floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked, //specify the location of the FAB
@@ -139,22 +145,69 @@ indicatorColor: Color(0xffFF8701),
   }
 }
 
-class CurrentEvent extends StatelessWidget {
+class CurrentEvent extends StatefulWidget {
+  @override
+  _CurrentEventState createState() => _CurrentEventState();
+}
+
+class _CurrentEventState extends State<CurrentEvent> {
+  Welcome listTodos = Welcome();
+  bool fetching = true;
+
+  void getHttp() async {
+    setState(() {
+      fetching = true;
+    });
+    try {
+      Response response =
+      await Dio().get("https://networkintern.herokuapp.com/api/events?type=current");
+      setState(() {
+        listTodos = welcomeFromJson(jsonEncode(response.data)) ;
+        fetching = false;
+      });
+    } catch (e) {
+      setState(() {
+        fetching = false;
+      });
+      print(e);
+    }
+  }
+
+  @override
+  void initState() {
+    getHttp();
+    super.initState();
+  }
+
  List <String> img = [  "assets/images/dev2.png" ,"assets/images/dev.png"  ,"assets/images/meme.jpg"];
+
  List <String> title = [ "Google dev festival & meetup \n& Start up business idea " , "Standup Comdian by Varun \nlaughter club shows " ,"Standup Comdian by Varun \nlaughter club shows" ,];
+
  List <String> date = [ "22" , "28" , "30"];
 
  List <String> subtitle = [ "Google Devfest" , "LDevlop Thecho" , "Child Play Center"];
 
   @override
   Widget build(BuildContext context) {
+    if (fetching) {
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+    if (listTodos.events.length == 0) {
+      return Center(
+        child: Text("No Data"),
+      );
+    }
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 16, ),
       color: Color(0xffF7FBFE),
       padding: EdgeInsets.only(top: 18),
-      child: ListView.builder(
-        itemCount: img.length,
+      child:
+      ListView.builder(
+        itemCount: listTodos.events.length,
         itemBuilder: (context , index){
+          Welcome todo = listTodos;
            return Column(
              children: [
 
@@ -195,7 +248,7 @@ class CurrentEvent extends StatelessWidget {
                          ),
                          child: Center(
                            child: RichText(text: TextSpan(
-                               text : "${date[index]}",
+                               text : "22",
                                style: TextStyle(color: Color(0xffFF8701 ),
                                    fontWeight: FontWeight.bold,
                                    fontSize: 11),
@@ -208,7 +261,7 @@ class CurrentEvent extends StatelessWidget {
                        ),
                        SizedBox(width: 11,),
                        Container(
-                         child: Text("${title[index]}"
+                         child: Text("${todo.events[index].title}"
                            , style: TextStyle(color:Color(0xff2A3E68), fontWeight: FontWeight.bold,fontSize: 13 ),),
                        ),
 
@@ -220,18 +273,18 @@ class CurrentEvent extends StatelessWidget {
                  SizedBox(height: 10,),
                  Container(
 
-                   child: Image.asset("${img[index]}" ),
+                   child: Image.network("${todo.events[index].bannerImage}" ),
                  ),
                  SizedBox(height: 6,),
                  Container(
                      margin: EdgeInsets.symmetric(horizontal: 16),
                      alignment: Alignment.topLeft,
-                     child: Text("${subtitle[index]}" , style: TextStyle(color: Color(0xff2A3E68) , fontWeight: FontWeight.bold, fontSize: 16),))
+                     child: Text( "${todo.events[index].description}"  , style: TextStyle(color: Color(0xff2A3E68) , fontWeight: FontWeight.bold, fontSize: 16),))
                  ,SizedBox(height: 3,),
                  Container(
                      margin: EdgeInsets.symmetric(horizontal: 16),
                      alignment: Alignment.topLeft,
-                     child: Text("10.30Am - 01.00PM . ITI, Mumbai..." , style: TextStyle(color: Color(0xffA1A0A0) , fontWeight: FontWeight.w400 , fontSize: 13),))
+                     child: Text("${todo.events[index].location}", style: TextStyle(color: Color(0xffA1A0A0) , fontWeight: FontWeight.w400 , fontSize: 13),))
                  ,SizedBox(height: 7,),
                  Container(
                      margin: EdgeInsets.symmetric(horizontal: 15),
@@ -304,171 +357,214 @@ class CurrentEvent extends StatelessWidget {
   }
 }
 
-class PastEvent extends StatelessWidget {
- List <String> img = [  "assets/images/dev2.png" ,"assets/images/dev.png"  ,"assets/images/meme.jpg"];
- List <String> title = [ "Google dev festival & meetup \n& Start up business idea " , "Standup Comdian by Varun \nlaughter club shows " ,"Standup Comdian by Varun \nlaughter club shows" ,];
- List <String> date = [ "22" , "28" , "30"];
+class PastEvent extends StatefulWidget {
+  @override
+  _PastEventState createState() => _PastEventState();
+}
 
- List <String> subtitle = [ "Google Devfest" , "LDevlop Thecho" , "Child Play Center"];
+class _PastEventState extends State<PastEvent> {
+  Welcome listTodos = Welcome();
+  bool fetching = true;
+
+  void getHttp() async {
+    setState(() {
+      fetching = true;
+    });
+    try {
+      Response response =
+      await Dio().get("https://networkintern.herokuapp.com/api/events?type=current");
+      setState(() {
+        listTodos = welcomeFromJson(jsonEncode(response.data)) ;
+        fetching = false;
+      });
+    } catch (e) {
+      setState(() {
+        fetching = false;
+      });
+      print(e);
+    }
+  }
+
+  @override
+  void initState() {
+    getHttp();
+    super.initState();
+  }
+
 
   @override
   Widget build(BuildContext context) {
-    return
-       Container(
-         color: Color(0xffF7FBFE),
-    padding: EdgeInsets.only(top: 18),
-    child: ListView.builder(
-    itemCount: img.length,
-    itemBuilder: (context , index){
-    return Column(
-    children: [
-   Container(
-       decoration: BoxDecoration(
-          color: Colors.white,
-           borderRadius: BorderRadius.circular(10),
-           boxShadow: [
-             BoxShadow(
-                 color: Color(0xff00000008),
-                 offset: Offset(0,3),
-                 blurRadius: 6
-             )
-           ]
-       ),
-    margin: EdgeInsets.symmetric(horizontal: 16, ),
-    child:  Column(
-    children: [
-      SizedBox(height: 10,),
-    Container(
-
-    child: Row(
-    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-    children: [
-    Row(
-    children: [
-    Container(
-    height:32,
-    width: 28,
-    decoration: BoxDecoration(
-    color: Color(0xffFFF6EE),
-    border: Border(
-    left: BorderSide(color: Color(0xffFF8701)),
-    right: BorderSide(color: Color(0xffFF8701)),
-    top: BorderSide(color: Color(0xffFF8701)),
-    bottom: BorderSide(color: Color(0xffFF8701)),
-    ),
-    borderRadius: BorderRadius.circular(5)
-
-
-    ),
-    child: Center(
-    child: RichText(text: TextSpan(
-    text : "${date[index]}",
-    style: TextStyle(color: Color(0xffFF8701 ),
-    fontWeight: FontWeight.bold,
-    fontSize: 11),
-    children: [
-    TextSpan(text: "\nFeb",
-    style: TextStyle(color: Color(0xff2A3E68) ,fontWeight: FontWeight.bold, fontSize: 6),
-    ) ]
-    )),
-    ),
-    ),
-    SizedBox(width: 11,),
-    Container(
-    child: Text("${title[index]}"
-    , style: TextStyle(color:Color(0xff2A3E68), fontWeight: FontWeight.bold,fontSize: 13 ),),
-    ),
-
-    ],
-    ),
-
-    Container(
-    padding: EdgeInsets.only(left: 40),
-    alignment: Alignment.topRight,
-    child: Icon(Icons.favorite_border ,size: 26 ,color: Color(0xffFF8701),))
-
-    ],
-    ),
-    ),
-
-
-    SizedBox(height: 10,),
-    Container(
-
-    child: Image.asset("${img[index]}" ),
-    ),
-    SizedBox(height: 6,),
-    Container(
-    margin: EdgeInsets.symmetric(horizontal: 16),
-    alignment: Alignment.topLeft,
-    child: Text("${subtitle[index]}" , style: TextStyle(color: Color(0xff2A3E68) , fontWeight: FontWeight.bold, fontSize: 16),)),
-    SizedBox(height: 3,),
-    Container(
-    margin: EdgeInsets.symmetric(horizontal: 16),
-    alignment: Alignment.topLeft,
-    child: Text("10.30Am - 01.00PM . ITI, Mumbai..." , style: TextStyle(color: Color(0xffA1A0A0) , fontWeight: FontWeight.w400 , fontSize: 13),))
-    ,SizedBox(height: 7,),
-    Container(
-    margin: EdgeInsets.symmetric(horizontal: 15),
-    alignment: Alignment.bottomRight,
-    child: Stack(
-    overflow: Overflow.visible,
-    children: [
-
-    Positioned(
-    left: -40,
-    child: CircleAvatar(
-    backgroundImage: AssetImage("assets/images/flower.jpg"),
-    radius: 12,
-    ),
-    ),
-    Positioned(
-    left: -30,
-    child: CircleAvatar(
-    backgroundImage: AssetImage("assets/images/stc.jpg"),
-    radius: 12,
-    ),
-    ),
-    Positioned(
-    left: -20,
-    child: CircleAvatar(
-    backgroundImage: AssetImage("assets/images/meme.jpg"),
-    radius: 12,
-    ),
-    ),
-    Positioned(
-    left: -10,
-    child: CircleAvatar(
-    backgroundImage: AssetImage("assets/images/flower.jpg"),
-    radius: 12,
-    ),
-    ),
-    Positioned(
-
-    child: CircleAvatar(
-    backgroundColor: Color(0xffFF8701),
-    child: Center(child: Text("99+" , style: TextStyle(fontSize: 8, color: Colors.white),)),
-    radius: 12,
-    ),
-    ),
-
-    ],
-    )
-    )
-    ,SizedBox(height: 12,),
-    ],
-    )
-    ),
-    SizedBox(height: 10,)
-
-    ],
-    );
+    if (fetching) {
+      return Center(
+        child: CircularProgressIndicator(),
+      );
     }
-    ),
+    if (listTodos.events.length == 0) {
+      return Center(
+        child: Text("No Data"),
+      );
+    }
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 16, ),
+      color: Color(0xffF7FBFE),
+      padding: EdgeInsets.only(top: 18),
+      child:
+      ListView.builder(
+          itemCount: listTodos.events.length,
+          itemBuilder: (context , index){
+            Welcome todo = listTodos;
+            return Column(
+              children: [
+
+                Container(
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: [
+                        BoxShadow(
+                            color: Color(0xff00000008),
+                            offset: Offset(0,3),
+                            blurRadius: 6
+                        )
+                      ]
+                  ),
+
+                  child: Column(
+                    children: [
+                      SizedBox(height: 10,),
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 18),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                Container(
+                                  height:32,
+                                  width: 28,
+                                  decoration: BoxDecoration(
+                                      color: Color(0xffFFF6EE),
+                                      border: Border(
+                                        left: BorderSide(color: Color(0xffFF8701)),
+                                        right: BorderSide(color: Color(0xffFF8701)),
+                                        top: BorderSide(color: Color(0xffFF8701)),
+                                        bottom: BorderSide(color: Color(0xffFF8701)),
+                                      ),
+                                      borderRadius: BorderRadius.circular(5)
+
+
+                                  ),
+                                  child: Center(
+                                    child: RichText(text: TextSpan(
+                                        text : "22",
+                                        style: TextStyle(color: Color(0xffFF8701 ),
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 11),
+                                        children: [
+                                          TextSpan(text: "\nFeb",
+                                            style: TextStyle(color: Color(0xff2A3E68) ,fontWeight: FontWeight.bold, fontSize: 6),
+                                          ) ]
+                                    )),
+                                  ),
+                                ),
+                                SizedBox(width: 11,),
+                                Container(
+                                  child: Text("${todo.events[index].title}"
+                                    , style: TextStyle(color:Color(0xff2A3E68), fontWeight: FontWeight.bold,fontSize: 13 ),),
+                                ),
+                              ],
+                            ),
+                            Icon(Icons.favorite_border , color: Color(0xffFF8701), size: 25,)
+
+
+                          ],
+                        ),
+                      ),
+
+
+                      SizedBox(height: 10,),
+                      Container(
+
+                        child: Image.network("${todo.events[index].bannerImage}"),
+                      ),
+                      SizedBox(height: 6,),
+                      Container(
+                          margin: EdgeInsets.symmetric(horizontal: 16),
+                          alignment: Alignment.topLeft,
+                          child: Text( "${todo.events[index].description}"  , style: TextStyle(color: Color(0xff2A3E68) , fontWeight: FontWeight.bold, fontSize: 16),))
+                      ,SizedBox(height: 3,),
+                      Container(
+                          margin: EdgeInsets.symmetric(horizontal: 16),
+                          alignment: Alignment.topLeft,
+                          child: Text("${todo.events[index].location}", style: TextStyle(color: Color(0xffA1A0A0) , fontWeight: FontWeight.w400 , fontSize: 13),))
+                      ,SizedBox(height: 7,),
+                      Container(
+                          margin: EdgeInsets.symmetric(horizontal: 15),
+                          alignment: Alignment.bottomRight,
+                          child: Stack(
+                            overflow: Overflow.visible,
+                            children: [
+
+                              Positioned(
+                                left: -40,
+                                child: CircleAvatar(
+                                  backgroundImage: AssetImage("assets/images/flower.jpg"),
+                                  radius: 12,
+                                ),
+                              ),
+                              Positioned(
+                                left: -30,
+                                child: CircleAvatar(
+                                  backgroundImage: AssetImage("assets/images/stc.jpg"),
+                                  radius: 12,
+                                ),
+                              ),
+                              Positioned(
+                                left: -20,
+                                child: CircleAvatar(
+                                  backgroundImage: AssetImage("assets/images/meme.jpg"),
+                                  radius: 12,
+                                ),
+                              ),
+                              Positioned(
+                                left: -10,
+                                child: CircleAvatar(
+                                  backgroundImage: AssetImage("assets/images/flower.jpg"),
+                                  radius: 12,
+                                ),
+                              ),
+                              Positioned(
+
+                                child: CircleAvatar(
+                                  backgroundColor: Color(0xffFF8701),
+                                  child: Center(child: Text("99+" , style: TextStyle(fontSize: 8, color: Colors.white),)),
+                                  radius: 12,
+                                ),
+                              ),
+
+                            ],
+                          )
+                      )
+                      ,SizedBox(height: 12,),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 10,)
+              ],
+            ) ;
+            //Column(
+            //   children: [
+            //     Card(
+            //       shadowColor: Color(0xff00000008),
+            //         margin: EdgeInsets.symmetric(horizontal: 16, ),
+            //         child:
+            //     ),
+            //     SizedBox(height: 10,)
+            //
+            //   ],
+            // );
+          }
+      ),
     );
-
-
-
   }
 }
-

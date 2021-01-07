@@ -74,6 +74,7 @@ class _LoginPageState extends State<LoginPage> {
       FocusScope.of(context).requestFocus(_focusNode);
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -67,3 +67,7 @@ class Event {
     "users_attending": List<dynamic>.from(usersAttending.map((x) => x)),
   };
 }
+
+
+
+
