@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:jiovii_fullapp/Screens/jiivo_Page.dart';
 import 'login_page.dart';
-import 'Extension_page.dart';
+import '../Extension_page.dart';
 void main() {
   runApp(MyApp());
 }
@@ -17,21 +18,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.deepOrange,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: LoginPage(),
-    );
-  }
-}
-
-//checking ...
-class Extensio extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: [
-           Text("haiiii  checking Extention" , style: TitleStyle,)
-        ],
-      ),
+      home: Homepage(),
     );
   }
 }
