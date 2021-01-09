@@ -500,7 +500,7 @@ class _PastEventState extends State<PastEvent> {
                       borderRadius: BorderRadius.circular(10),
                       boxShadow: [
                         BoxShadow(
-                            color: Color(0x08000000),
+                            color: Color(0x0800000008),
                             offset: Offset(0, 3),
                             blurRadius: 6)
                       ]),

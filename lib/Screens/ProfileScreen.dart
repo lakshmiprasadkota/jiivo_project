@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:jiovii_fullapp/Extension_page.dart';
 import 'file:///D:/FlutterProjects/jiovii_fullapp/lib/models/profile_todo.dart';
 import 'login_page.dart';
 
@@ -383,28 +384,32 @@ class _ProfileClassState extends State<ProfileClass> {
               SizedBox(
                 height: 20,
               ),
-              Container(
-                height: 50,
-                width: double.infinity,
-                decoration: BoxDecoration(boxShadow: [
-                  BoxShadow(
-                      color: Color(0x1AFF8701),
-                      offset: Offset(0, 5),
-                      blurRadius: 10)
-                ]),
-                child: RaisedButton(
-                    onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => LoginPage()));
-                    },
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20.0),
-                    ),
-                    color: Color(0xffFF8701),
+              InkWell(
+                onTap: () {
+                  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (_)=>LoginPage()), (route) => false) ;
+                  setState(() {
+
+                  });
+                },
+                child: Container(
+                  height: 50,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                      color: Color(0xffFF8701),
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                            color: Color(0x1AFF8701),
+                            offset: Offset(0, 5),
+                            blurRadius: 10)
+                      ]),
+                  child: Center(
                     child: Text(
-                      "Logout",
-                      style: TextStyle(color: Color(0xFFFFFFFF), fontSize: 14),
-                    )),
+                      "Confirm",
+                      style: botton,
+                    ),
+                  ),
+                ),
               ),
             ],
           ),
