@@ -1,8 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:jiovii_fullapp/Extension_page.dart';
+import 'package:jiovii_fullapp/extension_page.dart';
 import 'file:///D:/FlutterProjects/jiovii_fullapp/lib/Screens/verification_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 class SignUpPage extends StatefulWidget {
   @override
@@ -41,25 +43,35 @@ class _SignUpPageState extends State<SignUpPage> {
       "name": name,
       "email": email,
     });
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    // String token = prefs.get("token");
     Response response =
-        await Dio().post("https://networkintern.herokuapp.com/api/signup",
-            data: formData,
-            options: Options(
-              validateStatus: (status) => status < 500,
-            ));
+    await Dio().post("https://networkintern.herokuapp.com/api/signup",
+        data: formData,
+        options: Options(
+            validateStatus: (status) => status < 500,
+
+        ));
     setState(() {
       res = response.data;
       loading = false;
     });
     if (response.data['status']) {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => VerificationPage()));
+      prefs.setString("token",response.data["token"]);
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => VerificationPage(
+
+          ),
+        ),
+      );
     } else {
       Fluttertoast.showToast(msg: response.data['message']);
       print(response.data['message']);
     }
     print(response);
   }
+
 
   @override
   Widget build(BuildContext context) {

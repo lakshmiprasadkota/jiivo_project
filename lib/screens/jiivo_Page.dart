@@ -1,13 +1,15 @@
 import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'file:///D:/FlutterProjects/jiovii_fullapp/lib/Screens/ProfileScreen.dart';
+import 'file:///D:/FlutterProjects/jiovii_fullapp/lib/Screens/profile_screen.dart';
 import 'file:///D:/FlutterProjects/jiovii_fullapp/lib/models/past_todo.dart';
 import 'file:///D:/FlutterProjects/jiovii_fullapp/lib/models/current_todo.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Homepage extends StatefulWidget {
+  Homepage({ this.tk});
+  final String tk;
   @override
   _HomepageState createState() => _HomepageState();
 }
@@ -16,13 +18,13 @@ class _HomepageState extends State<Homepage> {
   int selectedIndex = 0;
   String text = "Home";
 
+
   void updateTabSelection(int index, String buttonText) {
     setState(() {
       selectedIndex = index;
       text = buttonText;
     });
   }
-
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -70,7 +72,7 @@ class _HomepageState extends State<Homepage> {
         ),
         body: TabBarView(
           children: [
-            CurrentEvent(),
+            CurrentEvent(ceTk:widget.tk,),
             PastEvent(),
           ],
         ),
@@ -173,6 +175,8 @@ class _HomepageState extends State<Homepage> {
 }
 
 class CurrentEvent extends StatefulWidget {
+  CurrentEvent ({ this.ceTk});
+  final String ceTk;
   @override
   _CurrentEventState createState() => _CurrentEventState();
 }
@@ -180,18 +184,29 @@ class CurrentEvent extends StatefulWidget {
 class _CurrentEventState extends State<CurrentEvent> {
   Welcome listTodos = Welcome();
   bool fetching = true;
-
   void getHttpOfCurrentEvents() async {
     setState(() {
       fetching = true;
     });
+    SharedPreferences prefs= await SharedPreferences.getInstance();
+    String token = prefs.get("token");
     try {
-      Response response = await Dio()
-          .get("https://networkintern.herokuapp.com/api/events?type=current");
+      SharedPreferences prefs= await SharedPreferences.getInstance();
+      String token = prefs.get("token");
+      Response response =
+      await Dio().get("https://networkintern.herokuapp.com/api/events?type=current",
+          options: Options(
+              validateStatus: (status) => status < 500,
+              headers: {
+                "Authorization":"Bearer $token"
+              }
+          )
+      );
       setState(() {
         listTodos = welcomeFromJson(jsonEncode(response.data));
         fetching = false;
       });
+      print(response);
     } catch (e) {
       setState(() {
         fetching = false;
@@ -450,8 +465,16 @@ class _PastEventState extends State<PastEvent> {
       fetching = true;
     });
     try {
+      SharedPreferences prefs= await SharedPreferences.getInstance();
+      String token = prefs.get("token");
       Response response = await Dio()
-          .get("https://networkintern.herokuapp.com/api/events?type=past");
+          .get("https://networkintern.herokuapp.com/api/events?type=past",
+          options: Options(
+              validateStatus: (status) => status < 500,
+              headers: {
+                "Authorization":"Bearer $token"
+              }
+          ));
       setState(() {
         listTodos = pastFromMap(jsonEncode(response.data));
         fetching = false;
@@ -463,13 +486,11 @@ class _PastEventState extends State<PastEvent> {
       print(e);
     }
   }
-
   @override
   void initState() {
     getHttp();
     super.initState();
   }
-
   @override
   Widget build(BuildContext context) {
     if (fetching) {
@@ -488,7 +509,7 @@ class _PastEventState extends State<PastEvent> {
       ),
       color: Color(0xffF7FBFE),
       padding: EdgeInsets.only(top: 18),
-      child: ListView.builder(
+      child: listTodos == null ? Text("No Data") : ListView.builder(
           itemCount: listTodos.events.length,
           itemBuilder: (context, index) {
             Past todo = listTodos;

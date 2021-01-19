@@ -1,9 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'file:///D:/FlutterProjects/jiovii_fullapp/lib/Screens/SignUp_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'file:///D:/FlutterProjects/jiovii_fullapp/lib/Screens/signup_page.dart';
 import 'file:///D:/FlutterProjects/jiovii_fullapp/lib/Screens/jiivo_Page.dart';
-import '../Extension_page.dart';
+import '../extension_page.dart';
+
 
 class LoginPage extends StatefulWidget {
   @override
@@ -40,17 +42,22 @@ class _LoginPageState extends State<LoginPage> {
       "mobile": number,
       "password": password,
     });
+    SharedPreferences prefs= await SharedPreferences.getInstance();
+    String token = prefs.get("token");
     Response response =
-        await Dio().post("https://networkintern.herokuapp.com/api/login",
-            data: formData,
-            options: Options(
-              validateStatus: (status) => status < 500,
-            ));
+    await Dio().post("https://networkintern.herokuapp.com/api/login",
+        data: formData,
+        options: Options(
+            validateStatus: (status) => status < 500,
+
+        ));
     setState(() {
       res = response.data;
       loading = false;
     });
     if (response.data['status']) {
+      prefs.setString('token',
+          response.data["token"]);
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => Homepage()));
     } else {
@@ -59,7 +66,6 @@ class _LoginPageState extends State<LoginPage> {
     }
     print(response);
   }
-
   @override
   void initState() {
     super.initState();
@@ -98,7 +104,7 @@ class _LoginPageState extends State<LoginPage> {
               Container(
                   alignment: Alignment.topLeft,
                   child: Text(
-                    "Sign In",
+                    "Login In",
                     style: TitleStyle,
                   )),
               SizedBox(
