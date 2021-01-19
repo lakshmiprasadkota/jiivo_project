@@ -14,7 +14,6 @@ class VerificationPage extends StatefulWidget {
 
 class _VerificationPageState extends State<VerificationPage> {
   bool loading = false;
-
   dynamic res;
   final numberController = TextEditingController();
 
