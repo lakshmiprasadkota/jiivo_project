@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:jiovii_fullapp/network/base_network.dart';
 import 'file:///D:/FlutterProjects/jiovii_fullapp/lib/Screens/profile_screen.dart';
 import 'file:///D:/FlutterProjects/jiovii_fullapp/lib/models/past_todo.dart';
 import 'file:///D:/FlutterProjects/jiovii_fullapp/lib/models/current_todo.dart';
@@ -172,14 +173,12 @@ class _HomepageState extends State<Homepage> {
     );
   }
 }
-
 class CurrentEvent extends StatefulWidget {
   CurrentEvent ({ this.ceTk});
   final String ceTk;
   @override
   _CurrentEventState createState() => _CurrentEventState();
 }
-
 class _CurrentEventState extends State<CurrentEvent> {
   Welcome listTodos = Welcome();
   bool fetching = true;
@@ -187,17 +186,17 @@ class _CurrentEventState extends State<CurrentEvent> {
     setState(() {
       fetching = true;
     });
-    SharedPreferences prefs= await SharedPreferences.getInstance();
-    String token = prefs.get("token");
+
+
     try {
       SharedPreferences prefs= await SharedPreferences.getInstance();
       String token = prefs.get("token");
       Response response =
-      await Dio().get("https://networkintern.herokuapp.com/api/events?type=current",
+      await dioClient.ref().get("https://networkintern.herokuapp.com/api/events?type=current",
           options: Options(
               validateStatus: (status) => status < 500,
               headers: {
-                "Authorization":"Bearer $token"
+                "Authorization":"Bearer $token "
               }
           )
       );
@@ -219,7 +218,6 @@ class _CurrentEventState extends State<CurrentEvent> {
     getHttpOfCurrentEvents();
     super.initState();
   }
-
   @override
   Widget build(BuildContext context) {
     if (fetching) {
@@ -233,6 +231,7 @@ class _CurrentEventState extends State<CurrentEvent> {
       );
     }
     return Container(
+      
       margin: EdgeInsets.symmetric(
         horizontal: 16,
       ),
@@ -273,22 +272,22 @@ class _CurrentEventState extends State<CurrentEvent> {
                                     right: BorderSide(color: Color(0xffFF8701)),
                                     top: BorderSide(color: Color(0xffFF8701)),
                                     bottom:
-                                        BorderSide(color: Color(0xffFF8701)),
+                                    BorderSide(color: Color(0xffFF8701)),
                                   ),
                                   borderRadius: BorderRadius.circular(5)),
                               child: Center(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                  Text( DateFormat("MM").format(todo.events[index].date) , style: TextStyle(color: Color(0xffFF8701 ),
-                                fontWeight: FontWeight.bold,
-                                       fontSize: 11,)),
-                                  Text( DateFormat("d").format(todo.events[index].date) ,style: TextStyle(color: Color(0xffFF8701 ),
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 11,)),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text( DateFormat("MM").format(todo.events[index].date) , style: TextStyle(color: Color(0xffFF8701 ),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 11,)),
+                                      Text( DateFormat("d").format(todo.events[index].date) ,style: TextStyle(color: Color(0xffFF8701 ),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 11,)),
 
-                                ],)
+                                    ],)
                                 // child: RichText(text: TextSpan(
                                 //     text : "22",
                                 //     style: TextStyle(color: Color(0xffFF8701 ),
@@ -323,7 +322,7 @@ class _CurrentEventState extends State<CurrentEvent> {
                       ),
                       Container(
                         child:
-                            Image.network("${todo.events[index].bannerImage}"),
+                        Image.network("${todo.events[index].bannerImage}"),
                       ),
                       SizedBox(
                         height: 6,
@@ -349,35 +348,35 @@ class _CurrentEventState extends State<CurrentEvent> {
                                     fontWeight: FontWeight.w400,
                                     fontSize: 13),
                                 children: [
-                              TextSpan(
-                                text: " - ",
-                                style: TextStyle(
-                                    color: Color(0xffA1A0A0),
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 13),
-                              ),
-                              TextSpan(
-                                text: "${todo.events[index].to} ",
-                                style: TextStyle(
-                                    color: Color(0xffA1A0A0),
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 13),
-                              ),
-                              TextSpan(
-                                text: " . ",
-                                style: TextStyle(
-                                    color: Color(0xffA1A0A0),
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 20),
-                              ),
-                              TextSpan(
-                                text: " ${todo.events[index].location}",
-                                style: TextStyle(
-                                    color: Color(0xffA1A0A0),
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 13),
-                              ),
-                            ])),
+                                  TextSpan(
+                                    text: " - ",
+                                    style: TextStyle(
+                                        color: Color(0xffA1A0A0),
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 13),
+                                  ),
+                                  TextSpan(
+                                    text: "${todo.events[index].to} ",
+                                    style: TextStyle(
+                                        color: Color(0xffA1A0A0),
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 13),
+                                  ),
+                                  TextSpan(
+                                    text: " . ",
+                                    style: TextStyle(
+                                        color: Color(0xffA1A0A0),
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 20),
+                                  ),
+                                  TextSpan(
+                                    text: " ${todo.events[index].location}",
+                                    style: TextStyle(
+                                        color: Color(0xffA1A0A0),
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 13),
+                                  ),
+                                ])),
                       ),
                       SizedBox(
                         height: 7,
@@ -385,78 +384,78 @@ class _CurrentEventState extends State<CurrentEvent> {
                       Container(
                         height: 50,
 
-                          margin: EdgeInsets.symmetric(horizontal: 15),
-                          alignment: Alignment.bottomRight,
-                          child: Stack(
-                            children: [
-                              for(int i =0 ; i<(todo.events[index].usersAttending.length >3 ? 3 : todo.events[index].usersAttending.length );i++)
-                                Positioned(
-                                  left: i * 30.0,
-                                  child: CircleAvatar(
+                        margin: EdgeInsets.symmetric(horizontal: 15),
+                        alignment: Alignment.bottomRight,
+                        child: Stack(
+                          children: [
+                            for(int i =0 ; i<(todo.events[index].usersAttending.length >3 ? 3 : todo.events[index].usersAttending.length );i++)
+                              Positioned(
+                                left: i * 30.0,
+                                child: CircleAvatar(
                                   backgroundImage: NetworkImage(
                                     todo.events[index].usersAttending[i],
 
                                   ),
-                                     radius: 20,
+                                  radius: 20,
                                 ),),
-                              Positioned(
-                                  left: 3 * 30.0,
-                                  child: CircleAvatar(
-                                    backgroundColor: Color(0xffFF8701),
-                                child: Text("${todo.events[index].usersAttending.length-3 }+" , style: TextStyle(color: Colors.white,fontSize: 8),),
-                                    radius: 20,
-                              ))
-                            ],
-                          ),
-                          // child: Stack(
-                          //   overflow: Overflow.visible,
-                          //   children: [
-                          //     Positioned(
-                          //       left: -40,
-                          //       child: CircleAvatar(
-                          //         backgroundImage:
-                          //             AssetImage("assets/images/flower.jpg"),
-                          //         radius: 12,
-                          //       ),
-                          //     ),
-                          //     Positioned(
-                          //       left: -30,
-                          //       child: CircleAvatar(
-                          //         backgroundImage:
-                          //             AssetImage("assets/images/stc.jpg"),
-                          //         radius: 12,
-                          //       ),
-                          //     ),
-                          //     Positioned(
-                          //       left: -20,
-                          //       child: CircleAvatar(
-                          //         backgroundImage:
-                          //             AssetImage("assets/images/meme.jpg"),
-                          //         radius: 12,
-                          //       ),
-                          //     ),
-                          //     Positioned(
-                          //       left: -10,
-                          //       child: CircleAvatar(
-                          //         backgroundImage:
-                          //             AssetImage("assets/images/flower.jpg"),
-                          //         radius: 12,
-                          //       ),
-                          //     ),
-                          //     Positioned(
-                          //       child: CircleAvatar(
-                          //         backgroundColor: Color(0xffFF8701),
-                          //         child: Center(
-                          //             child: Text(
-                          //           "99+",
-                          //           style: TextStyle(
-                          //               fontSize: 8, color: Colors.white),
-                          //         )),
-                          //         radius: 12,
-                          //       ),
-                          //     ),
-                          //   ],
-                          // )
+                            Positioned(
+                                left: 3 * 30.0,
+                                child: CircleAvatar(
+                                  backgroundColor: Color(0xffFF8701),
+                                  child: Text("${todo.events[index].usersAttending.length-3 }+" , style: TextStyle(color: Colors.white,fontSize: 8),),
+                                  radius: 20,
+                                ))
+                          ],
+                        ),
+                        // child: Stack(
+                        //   overflow: Overflow.visible,
+                        //   children: [
+                        //     Positioned(
+                        //       left: -40,
+                        //       child: CircleAvatar(
+                        //         backgroundImage:
+                        //             AssetImage("assets/images/flower.jpg"),
+                        //         radius: 12,
+                        //       ),
+                        //     ),
+                        //     Positioned(
+                        //       left: -30,
+                        //       child: CircleAvatar(
+                        //         backgroundImage:
+                        //             AssetImage("assets/images/stc.jpg"),
+                        //         radius: 12,
+                        //       ),
+                        //     ),
+                        //     Positioned(
+                        //       left: -20,
+                        //       child: CircleAvatar(
+                        //         backgroundImage:
+                        //             AssetImage("assets/images/meme.jpg"),
+                        //         radius: 12,
+                        //       ),
+                        //     ),
+                        //     Positioned(
+                        //       left: -10,
+                        //       child: CircleAvatar(
+                        //         backgroundImage:
+                        //             AssetImage("assets/images/flower.jpg"),
+                        //         radius: 12,
+                        //       ),
+                        //     ),
+                        //     Positioned(
+                        //       child: CircleAvatar(
+                        //         backgroundColor: Color(0xffFF8701),
+                        //         child: Center(
+                        //             child: Text(
+                        //           "99+",
+                        //           style: TextStyle(
+                        //               fontSize: 8, color: Colors.white),
+                        //         )),
+                        //         radius: 12,
+                        //       ),
+                        //     ),
+                        //   ],
+                        // )
                       ),
                       SizedBox(
                         height: 12,
@@ -543,7 +542,7 @@ class _PastEventState extends State<PastEvent> {
       ),
       color: Color(0xffF7FBFE),
       padding: EdgeInsets.only(top: 18),
-      child: listTodos == null ? Text("No Data") : ListView.builder(
+      child: ListView.builder(
           itemCount: listTodos.events.length,
           itemBuilder: (context, index) {
             Past todo = listTodos;
@@ -555,7 +554,7 @@ class _PastEventState extends State<PastEvent> {
                       borderRadius: BorderRadius.circular(10),
                       boxShadow: [
                         BoxShadow(
-                            color: Color(0x0800000008),
+                            color: Color(0x08000000),
                             offset: Offset(0, 3),
                             blurRadius: 6)
                       ]),
@@ -567,69 +566,59 @@ class _PastEventState extends State<PastEvent> {
                       Container(
                         margin: EdgeInsets.symmetric(horizontal: 18),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Row(
-                              children: [
-                                Container(
-                                  height: 50,
-                                  width: 50,
-                                  decoration: BoxDecoration(
-                                      color: Color(0xffFFF6EE),
-                                      border: Border(
-                                        left: BorderSide(color: Color(0xffFF8701)),
-                                        right: BorderSide(color: Color(0xffFF8701)),
-                                        top: BorderSide(color: Color(0xffFF8701)),
-                                        bottom:
-                                        BorderSide(color: Color(0xffFF8701)),
-                                      ),
-                                      borderRadius: BorderRadius.circular(5)),
-                                  child: Center(
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Text( DateFormat("MM").format(todo.events[index].date) , style: TextStyle(color: Color(0xffFF8701 ),
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 11,)),
-                                          Text( DateFormat("d").format(todo.events[index].date) ,style: TextStyle(color: Color(0xffFF8701 ),
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 11,)),
+                            Container(
+                              height: 50,
+                              width: 50,
+                              decoration: BoxDecoration(
+                                  color: Color(0xffFFF6EE),
+                                  border: Border(
+                                    left: BorderSide(color: Color(0xffFF8701)),
+                                    right: BorderSide(color: Color(0xffFF8701)),
+                                    top: BorderSide(color: Color(0xffFF8701)),
+                                    bottom:
+                                    BorderSide(color: Color(0xffFF8701)),
+                                  ),
+                                  borderRadius: BorderRadius.circular(5)),
+                              child: Center(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text( DateFormat("MM").format(todo.events[index].date) , style: TextStyle(color: Color(0xffFF8701 ),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 11,)),
+                                      Text( DateFormat("d").format(todo.events[index].date) ,style: TextStyle(color: Color(0xffFF8701 ),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 11,)),
 
-                                        ],)
-                                    // child: RichText(text: TextSpan(
-                                    //     text : "22",
-                                    //     style: TextStyle(color: Color(0xffFF8701 ),
-                                    //         fontWeight: FontWeight.bold,
-                                    //         fontSize: 11),
-                                    //     children: [
-                                    //       TextSpan(text: "\nFeb",
-                                    //         style: TextStyle(color: Color(0xff2A3E68) ,fontWeight: FontWeight.bold, fontSize: 6),
-                                    //       ) ]
-                                    // )),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 11,
-                                ),
-                                Flexible(
-                                  child: Container(
-                                    child: Text(
-                                      "${todo.events[index].description}",
-                                      style: TextStyle(
-                                          color: Color(0xff2A3E68),
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 13),
-                                    ),
-                                  ),
-                                ),
-                              ],
+                                    ],)
+                                // child: RichText(text: TextSpan(
+                                //     text : "22",
+                                //     style: TextStyle(color: Color(0xffFF8701 ),
+                                //         fontWeight: FontWeight.bold,
+                                //         fontSize: 11),
+                                //     children: [
+                                //       TextSpan(text: "\nFeb",
+                                //         style: TextStyle(color: Color(0xff2A3E68) ,fontWeight: FontWeight.bold, fontSize: 6),
+                                //       ) ]
+                                // )),
+                              ),
                             ),
-                            // Icon(
-                            //   Icons.favorite_border,
-                            //   color: Color(0xffFF8701),
-                            //   size: 25,
-                            // )
+                            SizedBox(
+                              width: 11,
+                            ),
+                            Flexible(
+                              child: Container(
+                                child: Text(
+                                  "${todo.events[index].description}",
+                                  style: TextStyle(
+                                      color: Color(0xff2A3E68),
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 13),
+                                ),
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -638,7 +627,7 @@ class _PastEventState extends State<PastEvent> {
                       ),
                       Container(
                         child:
-                            Image.network("${todo.events[index].bannerImage}"),
+                        Image.network("${todo.events[index].bannerImage}"),
                       ),
                       SizedBox(
                         height: 6,

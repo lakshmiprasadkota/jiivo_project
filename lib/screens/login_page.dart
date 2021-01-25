@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:jiovii_fullapp/network/base_network.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'file:///D:/FlutterProjects/jiovii_fullapp/lib/Screens/signup_page.dart';
 import 'file:///D:/FlutterProjects/jiovii_fullapp/lib/Screens/jiivo_Page.dart';
@@ -43,16 +44,15 @@ class _LoginPageState extends State<LoginPage> {
       "password": password,
     });
     SharedPreferences prefs= await SharedPreferences.getInstance();
-    String token = prefs.get("token");
-    Response response =
-    await Dio().post("https://networkintern.herokuapp.com/api/login",
-        data: formData,
-        options: Options(
-            validateStatus: (status) => status < 500,
 
-        ));
+    Response response =
+    await dioClient.tokenRef.post("/api/login",
+        data: formData,
+      );
     setState(() {
       res = response.data;
+
+
       loading = false;
     });
     if (response.data['status']) {
@@ -63,8 +63,10 @@ class _LoginPageState extends State<LoginPage> {
     } else {
       Fluttertoast.showToast(msg: response.data['message']);
       print(response.data['message']);
+
     }
     print(response);
+
   }
   @override
   void initState() {
@@ -97,10 +99,12 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       body: SingleChildScrollView(
+        physics: NeverScrollableScrollPhysics(),
         child: Container(
           margin: EdgeInsets.symmetric(vertical: 226, horizontal: 25),
           child: Column(
             children: [
+
               Container(
                   alignment: Alignment.topLeft,
                   child: Text(

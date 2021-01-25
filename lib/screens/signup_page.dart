@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:jiovii_fullapp/extension_page.dart';
+import 'package:jiovii_fullapp/network/base_network.dart';
 import 'file:///D:/FlutterProjects/jiovii_fullapp/lib/Screens/verification_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -44,14 +45,11 @@ class _SignUpPageState extends State<SignUpPage> {
       "email": email,
     });
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    // String token = prefs.get("token");
-    Response response =
-    await Dio().post("https://networkintern.herokuapp.com/api/signup",
-        data: formData,
-        options: Options(
-            validateStatus: (status) => status < 500,
 
-        ));
+    Response response =
+    await dioClient.tokenRef.post("/api/signUp",
+      data: formData,
+    );
     setState(() {
       res = response.data;
       loading = false;
@@ -78,6 +76,7 @@ class _SignUpPageState extends State<SignUpPage> {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       body: SingleChildScrollView(
+        physics: NeverScrollableScrollPhysics(),
         child: Container(
           margin: EdgeInsets.symmetric(vertical: 226, horizontal: 25),
           child: Column(
