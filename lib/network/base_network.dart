@@ -21,16 +21,15 @@ Future <String> _getAuthorizationToken() async{
   dynamic _init() {
     _dio = Dio();
     _dio.options = BaseOptions(
-      baseUrl: "https://networkintern.herokuapp.com/api/",
+      baseUrl: "https://networkintern.herokuapp.com",
       validateStatus: (status) => status <500,
     );
-
     _tokenDio =Dio();
     _tokenDio.options = BaseOptions(
       baseUrl: "https://networkintern.herokuapp.com",
       validateStatus: (status) => status <500,
     );
-_dio.interceptors.add(InterceptorsWrapper(
+  _dio.interceptors.add(InterceptorsWrapper(
   onRequest: (options) async {
     String token = await _getAuthorizationToken();
     options.headers["Authorization"] = "Bearer $token" ;
@@ -41,9 +40,7 @@ _dio.interceptors.add(InterceptorsWrapper(
     if (response?.statusCode == 401){
       _dio.interceptors.requestLock.lock();
       _dio.interceptors.responseLock.lock();
-
       final options= response.request;
-
       Response refreshResponse = await _tokenDio.post(
         '/api/refresh',
         data: FormData.fromMap({

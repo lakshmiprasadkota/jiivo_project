@@ -192,7 +192,7 @@ class _CurrentEventState extends State<CurrentEvent> {
       SharedPreferences prefs= await SharedPreferences.getInstance();
       String token = prefs.get("token");
       Response response =
-      await dioClient.ref().get("https://networkintern.herokuapp.com/api/events?type=current",
+      await dioClient.ref.get("/api/events?type=current",
           options: Options(
               validateStatus: (status) => status < 500,
               headers: {
@@ -500,8 +500,8 @@ class _PastEventState extends State<PastEvent> {
     try {
       SharedPreferences prefs= await SharedPreferences.getInstance();
       String token = prefs.get("token");
-      Response response = await Dio()
-          .get("https://networkintern.herokuapp.com/api/events?type=past",
+      Response response = await dioClient.ref.
+          get("/api/events?type=past",
           options: Options(
               validateStatus: (status) => status < 500,
               headers: {
