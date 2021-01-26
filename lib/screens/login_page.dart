@@ -2,9 +2,11 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:jiovii_fullapp/network/base_network.dart';
+import 'package:jiovii_fullapp/network/base_response.dart';
+import 'package:jiovii_fullapp/network/logins/login_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'file:///D:/FlutterProjects/jiovii_fullapp/lib/Screens/signup_page.dart';
-import 'file:///D:/FlutterProjects/jiovii_fullapp/lib/Screens/jiivo_Page.dart';
+import 'file:///D:/FlutterProjects/jiovii_fullapp/lib/Screens/homepage.dart';
 import '../extension_page.dart';
 
 
@@ -15,9 +17,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   FocusNode _focusNode;
-
   FocusNode _numberFocusNode;
-
   bool hidePassword = false;
   bool loading = false;
   dynamic res;
@@ -39,33 +39,30 @@ class _LoginPageState extends State<LoginPage> {
     setState(() {
       loading = true;
     });
-    FormData formData = FormData.fromMap({
+    Map<String, dynamic> data = {
       "mobile": number,
       "password": password,
-    });
-    SharedPreferences prefs= await SharedPreferences.getInstance();
+    };
 
-    Response response =
-    await dioClient.tokenRef.post("/api/login",
-        data: formData,
-      );
+
+   ResponseData responseData =
+    await  authManager.createLoginToken(data);
     setState(() {
-      res = response.data;
-
-
+      res = responseData.data;
       loading = false;
     });
-    if (response.data['status']) {
-      prefs.setString('token',
-          response.data["token"]);
+    if (responseData.status == ResponseStatus.SUCCESS) {
+      print(responseData.data['message']);
+      print("----------------------------------------------------------------------/n"
+          "----------------------------------------------------suscus");
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => Homepage()));
     } else {
-      Fluttertoast.showToast(msg: response.data['message']);
-      print(response.data['message']);
+      Fluttertoast.showToast(msg: responseData.message);
+      print(responseData.data['message']);
 
     }
-    print(response);
+    print(responseData);
 
   }
   @override

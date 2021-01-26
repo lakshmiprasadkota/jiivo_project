@@ -4,7 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:jiovii_fullapp/extension_page.dart';
 import 'package:jiovii_fullapp/screens/login_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'jiivo_Page.dart';
+import 'homepage.dart';
 
 class VerificationPage extends StatefulWidget {
   VerificationPage({this.tk});

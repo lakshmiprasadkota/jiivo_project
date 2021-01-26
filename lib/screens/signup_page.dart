@@ -5,6 +5,8 @@ import 'package:jiovii_fullapp/extension_page.dart';
 import 'package:jiovii_fullapp/network/base_network.dart';
 import 'file:///D:/FlutterProjects/jiovii_fullapp/lib/Screens/verification_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:jiovii_fullapp/network/base_response.dart';
+import 'package:jiovii_fullapp/network/logins/login_manager.dart';
 
 
 class SignUpPage extends StatefulWidget {
@@ -38,24 +40,21 @@ class _SignUpPageState extends State<SignUpPage> {
     setState(() {
       loading = true;
     });
-    FormData formData = FormData.fromMap({
+    Map<String, dynamic> data ={
       "mobile": number,
       "password": password,
       "name": name,
       "email": email,
-    });
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    };
 
-    Response response =
-    await dioClient.tokenRef.post("/api/signUp",
-      data: formData,
-    );
+
+    ResponseData responseData = await authManager.createSignUpToken(data);
     setState(() {
-      res = response.data;
+      res = responseData.data;
       loading = false;
     });
-    if (response.data['status']) {
-      prefs.setString("token",response.data["token"]);
+    if (responseData.status == ResponseStatus.SUCCESS) {
+
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => VerificationPage(
@@ -64,10 +63,10 @@ class _SignUpPageState extends State<SignUpPage> {
         ),
       );
     } else {
-      Fluttertoast.showToast(msg: response.data['message']);
-      print(response.data['message']);
+      Fluttertoast.showToast(msg: responseData.message);
+      print(responseData.data['message']);
     }
-    print(response);
+    print(responseData);
   }
 
 

@@ -1,11 +1,12 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 import 'package:jiovii_fullapp/extension_page.dart';
+import 'package:jiovii_fullapp/models/profile_todo.dart';
 import 'package:jiovii_fullapp/network/base_network.dart';
 
-import 'file:///D:/FlutterProjects/jiovii_fullapp/lib/models/profile_todo.dart';
+
 import 'login_page.dart';
 
 class ProfileClass extends StatefulWidget {
