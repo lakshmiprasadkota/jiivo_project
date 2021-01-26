@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:jiovii_fullapp/extension_page.dart';
 import 'package:jiovii_fullapp/network/base_network.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 import 'file:///D:/FlutterProjects/jiovii_fullapp/lib/models/profile_todo.dart';
 import 'login_page.dart';
 
@@ -22,16 +22,10 @@ class _ProfileClassState extends State<ProfileClass> {
       fetching = true;
     });
     try {
-      SharedPreferences prefs= await SharedPreferences.getInstance();
-      String token = prefs.get("token");
+
       Response response =
       await dioClient.ref.get("/api/profile",
-          options: Options(
-              validateStatus: (status) => status < 500,
-              headers: {
-                "Authorization":"Bearer $token"
-              }
-          )
+
       );
       setState(() {
         profileTodo = profileFromMap(jsonEncode(response.data));

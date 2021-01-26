@@ -6,7 +6,7 @@ import 'package:jiovii_fullapp/network/base_network.dart';
 import 'file:///D:/FlutterProjects/jiovii_fullapp/lib/Screens/profile_screen.dart';
 import 'file:///D:/FlutterProjects/jiovii_fullapp/lib/models/past_todo.dart';
 import 'file:///D:/FlutterProjects/jiovii_fullapp/lib/models/current_todo.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:intl/intl.dart';
 
 class Homepage extends StatefulWidget {
@@ -189,16 +189,10 @@ class _CurrentEventState extends State<CurrentEvent> {
 
 
     try {
-      SharedPreferences prefs= await SharedPreferences.getInstance();
-      String token = prefs.get("token");
+
       Response response =
       await dioClient.ref.get("/api/events?type=current",
-          options: Options(
-              validateStatus: (status) => status < 500,
-              headers: {
-                "Authorization":"Bearer $token "
-              }
-          )
+
       );
       setState(() {
         listTodos = welcomeFromJson(jsonEncode(response.data));
@@ -498,16 +492,10 @@ class _PastEventState extends State<PastEvent> {
       fetching = true;
     });
     try {
-      SharedPreferences prefs= await SharedPreferences.getInstance();
-      String token = prefs.get("token");
+
       Response response = await dioClient.ref.
           get("/api/events?type=past",
-          options: Options(
-              validateStatus: (status) => status < 500,
-              headers: {
-                "Authorization":"Bearer $token"
-              }
-          ));
+       );
       setState(() {
         listTodos = pastFromMap(jsonEncode(response.data));
         fetching = false;
