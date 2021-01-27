@@ -2,6 +2,9 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:jiovii_fullapp/extension_page.dart';
+import 'package:jiovii_fullapp/network/base_network.dart';
+import 'package:jiovii_fullapp/network/base_response.dart';
+import 'package:jiovii_fullapp/network/logins/verification_manager.dart';
 import 'package:jiovii_fullapp/screens/login_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'homepage.dart';
@@ -29,35 +32,29 @@ class _VerificationPageState extends State<VerificationPage> {
     setState(() {
       loading = true;
     });
-    FormData formData = FormData.fromMap({
+    Map<String, dynamic> data ={
       "otp": number,
-    });
+
+    };
     SharedPreferences prefs= await SharedPreferences.getInstance();
     String token = prefs.get("token");
-    Response response =
-        await Dio().post("https://networkintern.herokuapp.com/api/otp/validate",
-            data: formData,
-            options: Options(
-              validateStatus: (status) => status < 500,
-                headers: {
-                  "Authorization":"Bearer $token"
-                }
-                ));
+    ResponseData responseData =
+    await verificationManager.createVerification(data);
     print(token);
     setState(() {
-      res = response.data;
+      res = responseData.data;
       loading = false;
     });
-    if (response.data['status']) {
+    if  (responseData.status == ResponseStatus.SUCCESS) {
 
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => Homepage()));
     } else {
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => LoginPage()));
-      print(response.data['message']);
+      print(responseData.data['message']);
     }
-    print("response --->${response}");
+    print("response --->${responseData}");
     print("otp--${number}");
   }
 

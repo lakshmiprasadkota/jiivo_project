@@ -26,7 +26,6 @@ class _ProfileClassState extends State<ProfileClass> {
 
       Response response =
       await dioClient.ref.get("/api/profile",
-
       );
       setState(() {
         profileTodo = profileFromMap(jsonEncode(response.data));

@@ -56,34 +56,3 @@ class AuthManager {
 
 final authManager = AuthManager();
 
-// class LoginManager {
-//   Future<dynamic> createLoginToken (Map<String, dynamic> data) async{
-// FormData formData = FormData.fromMap(data);
-// Response response =
-//     await dioClient.tokenRef.post("/api/login",
-// data: formData,
-// );
-//
-// if (response?.statusCode == 200){
-//   SharedPreferences prefs= await SharedPreferences.getInstance();
-//   if (response.data['status']) {
-//     prefs.setString("token", response.data['token']);
-//     print(response.data);
-//     return ResponseData<String>("", ResponseStatus.SUCCESS,
-//         data: response.data);
-//
-//   } else {
-//
-//     return ResponseData(response.data['message'], ResponseStatus.FAILED,
-//     );
-//
-//   }
-//
-// }else{
-//   return ResponseData("Failed to get data", ResponseStatus.FAILED,
-//       );
-// }
-//   }
-// }
-//
-// final loginManager = LoginManager();
